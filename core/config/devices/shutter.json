@@ -1,0 +1,85 @@
+{
+	"shutter": {
+		"name":"Volet",
+		"category": {"heating": "0", "security": "0", "energy": "0", "light": "0", "automatism": "1", "multimedia": "0", "default": "0"},
+		"Synonyme":["Shutter","BSO","Roller Shutter","Shutters"],
+		"isVisible":"1",
+		"isEnable":"1",
+        "category":{
+			"heating":"0",
+			"security":"1",
+			"energy":"0",
+			"light":"0",
+			"automatism":"0",
+			"multimedia":"0",
+			"default":"0"
+		},
+		"cmd": [
+			{
+				"name": "Montée",
+				"Synonyme": [ "Up" ],
+				"SameCmd": "Montée|Stop",
+				"type": "action",
+				"subType": "other",
+				"isHistorized": "0",
+				"configuration": {
+					"IhcObjectType": "Volet",
+					"IhcObjectValue": "0",
+					"inverse": "0",
+					"subTypeAuto": "1",
+					"noBatterieCheck": "0"
+				},
+				"template": "",
+				"display": {
+					"icon": "<i class=\"fas fa-arrow-up\"><\/i>",
+					"generic_type": "FLAP_UP"
+				},
+				"isVisible": "1"
+			},
+			{
+				"name": "Stop",
+				"Synonyme": [ "Stop" ],
+				"SameCmd": "Montée|Stop",
+				"type": "action",
+				"subType": "other",
+				"isHistorized": "1",
+				"unite": "",
+				"configuration": {
+					"IhcObjectType": "Volet",
+					"IhcObjectValue": "0",
+					"inverse": "0",
+					"subTypeAuto": "1",
+					"noBatterieCheck": "0"
+				},
+				"template": "",
+				"display": {
+					"icon": "<i class=\"fas fa-stop\"><\/i>",
+					"generic_type": "FLAP_STOP"
+				},
+				"isVisible": "1"
+			},
+			{
+				"name": "Descendre",
+				"Synonyme": [ "Down" ],
+				"SameCmd": "Descendre|Stop",
+				"type": "action",
+				"subType": "other",
+				"isHistorized": "1",
+				"unite": "",
+				"configuration": {
+					"IhcObjectType": "Volet",
+					"IhcObjectValue": "0",
+					"inverse": "0",
+					"subTypeAuto": "1",
+					"noBatterieCheck": "0"
+				},
+				"template": "",
+				"display": {
+					"icon": "<i class=\"fas fa-arrow-down\"><\/i>",
+					"generic_type": "FLAP_DOWN"
+				},
+				"isVisible": "1"
+			}
+		]
+	}
+}

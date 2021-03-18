@@ -1,0 +1,19 @@
+{
+	"id": "ihc",
+	"name": "IHC",
+	"description": {
+		"fr_FR": "Pilotez votre installation domotique IHC depuis Jeedom.",
+		"en_US": "Control your IHC home automation system from Jeedom."
+	},
+	"licence": "AGPL",
+	"author": "idhe",
+	"require": "3.3.39",
+	"category": "automation protocol",
+	"hasDependency": true,
+	"hasOwnDeamon": true,
+	"maxDependancyInstallTime": 0,
+	"changelog": "",
+	"documentation": "",
+	"language": [ "fr_FR" ],
+	"compatibility": [ "miniplus", "smart", "rpi", "docker", "diy", "v4" ]
+}

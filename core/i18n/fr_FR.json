@@ -1,0 +1,47 @@
+{
+    "plugins\/ihc\/core\/class\/ihc.class.php": {
+        "Read failed": "Read failed",
+        "Le Resource ID doit obligatoirement être renseigné": "Le Resource ID doit obligatoirement être renseigné"
+    },
+    "plugins\/ihc\/desktop\/php\/ihc.php": {
+        "": "",
+        "Ajouter un équipement": "Ajouter un équipement",
+        "Rechercher": "Rechercher",
+        "Générale": "Générale",
+        "Dupliquer": "Dupliquer",
+        "Nom de l'équipement IHC": "Nom de l'équipement IHC",
+        "Objet parent": "Objet parent",
+        "Catégorie": "Catégorie",
+        "Visible": "Visible",
+        "Activer": "Activer",
+        "Commandes": "Commandes",
+        "Ajouter une commande IHC": "Ajouter une commande IHC",
+        "Nom": "Nom",
+        "Command_Type": "Type de Commande",
+        "Retours d'état": "Retours d'état",
+        "Paramètre": "Paramètre",
+        "Supprimer": "Supprimer",
+        "Sauvegarder": "Sauvegarder"
+    },
+    "plugins\/ihc\/desktop\/js\/ihc.js": {
+        "Configurer IHC": "Configurer ihc",
+        "Inverser": "Inverser",
+        "Imposer une valeur": "Imposer une valeur",
+        "Sélèctionner un DPT": "Sélèctionner un type de commande",
+        "Name": "Name",
+        "Rechercher une commande": "Rechercher une commande",
+        "Evenement": "Evenement",
+        "Visible": "Visible",
+        "Historiser": "Historiser",
+        "Min": "Min",
+        "Max": "Max",
+        "Unitée": "Unitée",
+        "Lifetime cache": "Lifetime cache",
+        "Tester": "Tester",
+        "Dupliquer": "Dupliquer"
+    },
+    "plugins\/ihc\/plugin_info\/info.xml": {
+        "Connecte Jeedom avec votre installation domotique IHC.": "Connecte Jeedom avec votre installation domotique IHC.",
+        "Voir la documentation jointe au plugin": "Voir la documentation jointe au plugin"
+    }
+}

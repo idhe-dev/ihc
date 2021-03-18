@@ -1,0 +1,65 @@
+{
+	"garage": {
+		"name": "Garage",
+		"category": {
+			"heating": "0",
+			"security": "0",
+			"energy": "0",
+			"light": "0",
+			"automatism": "1",
+			"multimedia": "0",
+			"default": "0"
+		},
+		"Synonyme": ["Garage"],
+		"isVisible": "1",
+		"isEnable": "1",
+		"category": {
+			"heating": "0",
+			"security": "0",
+			"energy": "0",
+			"light": "0",
+			"automatism": "1",
+			"multimedia": "0",
+			"default": "0"
+		},
+		"cmd": [
+			{
+				"name": "Etat",
+				"Synonyme": ["State"],
+				"type": "info",
+				"subType": "string",
+				"isHistorized": "0",
+				"unite": "",
+				"configuration": {
+					"IhcObjectType": "Etat",
+					"inverse": "0",
+					"subTypeAuto": "1",
+					"noBatterieCheck": "0"
+				},
+				"display": {
+					"generic_type": "GARAGE_STATE"
+				},
+				"isVisible": "0"
+			},
+			{
+				"name": "Impulsion",
+				"Synonyme": [ "on" ],
+				"SameCmd": "",
+				"type": "action",
+				"subType": "other",
+				"isHistorized": "0",
+				"configuration": {
+					"IhcObjectType": "Divers",
+					"IhcObjectValue": "0",
+					"inverse": "0",
+					"subTypeAuto": "1",
+					"noBatterieCheck": "0"
+				},
+				"display": {
+					"generic_type": "FLAP_DOWN"
+				},
+				"isVisible": "1"
+			}
+		]
+	}
+}

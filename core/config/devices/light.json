@@ -1,0 +1,84 @@
+{
+	"light":{
+		"name":"Lumière",
+		"category": {"heating": "0", "security": "0", "energy": "0", "light": "1", "automatism": "0", "multimedia": "0", "default": "0"},
+		"Synonyme":["Light","Lights","Dimmer","Variateur","Couleur ambiance","Ambiance"],
+		"isVisible":"1",
+		"isEnable":"1",
+        "category":{
+			"heating":"0",
+			"security":"0",
+			"energy":"0",
+			"light":"1",
+			"automatism":"0",
+			"multimedia":"0",
+			"default":"0"
+		},
+		"cmd":[
+          		{
+				"name":"Etat",
+				"Synonyme":["State"],
+				"type":"info",
+				"subType":"string",
+				"isHistorized":"0",
+				"unite":"",
+				"configuration":{
+					"IhcObjectType":"Etat",
+					"inverse":"0",
+					"subTypeAuto":"1",
+					"noBatterieCheck":"0"
+				},
+				"display":{
+					"generic_type":"LIGHT_STATE"
+				},
+				"isVisible":"0"
+			},{
+				"name":"On",
+				"Synonyme":["Commutation","Allumer"],
+				"SameCmd":"On|Off",
+				"type":"action",
+				"subType":"other",
+				"isHistorized":"0",
+				"configuration": {
+					"IhcObjectType": "Eclairage",
+					"IhcObjectValue": "1",
+					"inverse": "0",
+					"subTypeAuto": "1",
+					"noBatterieCheck": "0"
+				},
+				"template":{
+					"dashboard": "light",
+					"mobile": "light"
+				},
+				"display":{
+					"generic_type":"LIGHT_ON"
+				},
+				"value":"Etat",
+				"isVisible":"1"
+			},{
+				"name":"Off",
+				"Synonyme":["Commutation","Eteint"],
+				"SameCmd":"On|Off",
+				"type":"action",
+				"subType":"other",
+				"isHistorized":"0",
+				"configuration": {
+					"IhcObjectType": "Eclairage",
+					"IhcObjectValue": "0",
+					"inverse": "0",
+					"subTypeAuto": "1",
+					"noBatterieCheck": "0"
+				},
+				"template":{
+					"dashboard": "core::light",
+					"mobile": "core::light"
+				},
+				"display":{
+					"generic_type":"LIGHT_OFF"
+				},
+				"value":"Etat",
+				"isVisible":"1"
+			}
+		]
+	}
+}

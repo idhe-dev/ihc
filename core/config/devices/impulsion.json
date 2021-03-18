@@ -1,0 +1,30 @@
+{
+	"impulsion":{
+		"name":"Impulsion",
+		"category": {"heating": "0", "security": "0", "energy": "0", "light": "0", "automatism": "1", "multimedia": "0", "default": "0"},
+		"Synonyme":[],
+		"isVisible":"1",
+		"isEnable":"1",
+		"cmd":[
+			{
+				"name": "Impulsion",
+				"Synonyme": ["on"],
+				"SameCmd": "",
+				"type": "action",
+				"subType": "other",
+				"isHistorized": "0",
+				"configuration": {
+					"IhcObjectType": "Divers",
+					"IhcObjectValue": "0",
+					"inverse": "0",
+					"subTypeAuto": "1",
+					"noBatterieCheck": "0"
+				},
+				"display": {
+					"generic_type": "FLAP_DOWN"
+				},
+				"isVisible": "1"
+			}
+		]
+	}
+}
