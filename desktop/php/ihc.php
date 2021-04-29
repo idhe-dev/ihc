@@ -61,7 +61,6 @@
 						<th>{{Template}}</th>
 						<th>{{Objet parent}}</th>
 						<th>{{Nom}}</th>
-						<th>{{Adresse Physique}}</th>
 						<th>{{Catégorie}}</th>
 						<th>{{Activer}}</th>
 						<th>{{Visible}}</th>
@@ -82,7 +81,6 @@
 								echo $eqLogic->getObject()->getHumanName(true,true);
 							echo '</td>';
 							echo '<td><span class="label label-info eqLogicDisplayAttr" data-l1key="name">' . $eqLogic->getName() . '</span></td>';
-							echo '<td><span class="label label-info eqLogicDisplayAttr" data-l1key="logicalId"> ' . $eqLogic->getLogicalId() . '</span></td>';
 							echo '<td>';
 							$Categorie=$eqLogic->getCategory();
 							foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {

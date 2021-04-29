@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 import logging
 import argparse
 import sys
@@ -5,7 +7,7 @@ import os
 import signal
 import json
 import time
-
+import threading
 
 from jeedom.jeedom import jeedom_utils, jeedom_com, jeedom_socket, JEEDOM_SOCKET_MESSAGE
 
@@ -14,8 +16,9 @@ from datetime import datetime
 
 # ----------------------------------------------------------------------------
 
+
 _log_level = "error"
-_socket_port = 55066
+_socket_port = 55099
 _socket_host = 'localhost'
 _pidfile = '/tmp/ihc.pid'
 _apikey = ''
@@ -27,7 +30,6 @@ parser.add_argument("--loglevel", help="Log Level for the daemon", type=str)
 parser.add_argument("--controllerID", help="controllerID", type=str)
 parser.add_argument("--controllerPW", help="controllerPW", type=str)
 parser.add_argument("--controllerIP", help="controllerIP", type=str)
-parser.add_argument("--IhcSoft", help="IhcSoft", type=str)
 parser.add_argument("--socketport", help="Socket Port", type=int)
 parser.add_argument("--callback", help="Value to write", type=str)
 parser.add_argument("--apikey", help="Value to write", type=str)
@@ -44,7 +46,8 @@ _callback = args.callback
 _controllerID = args.controllerID
 _controllerPW = args.controllerPW
 _controllerIP = args.controllerIP
-_IhcSoft = args.IhcSoft
+
+
 
 jeedom_utils.set_log_level(_log_level)
 
@@ -56,13 +59,13 @@ logging.debug('User : '+str(_controllerID))
 logging.debug('Controller IP : '+str(_controllerIP))
 
 # ----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 def main():
-    starttime = datetime.now()
 
     def on_ihc_change(ihcid, value):
         """Callback when ihc resource changes"""
-        logging.info("Resource change " + str(ihcid) + "->" + str(value) + " time: " + gettime())
+        logging.info("Resource change " + str(ihcid) + "->" + str(value))
         tmp = {}
         tmp["method"] = "updateValue"
         tmp["ResourceID"] = str(ihcid)
@@ -70,11 +73,12 @@ def main():
 
         jeedomCom.send_change_immediate(tmp)
 
-    def gettime():
-        dif = datetime.now() - starttime
-        return str(dif)
+    url = "http://" + _controllerIP
 
-    url = _IhcSoft + "://" + _controllerIP
+    if not IHCController.is_ihc_controller(url):
+        print("The device in this url does not look like a IHC controller")
+        exit()
+
     ihc = IHCController(url, _controllerID, _controllerPW)
     if not ihc.authenticate():
        logging.info("Authenticate failed")
@@ -94,9 +98,9 @@ def main():
                         logging.error('IHC_Write error : '+str(e))
                 elif message['method'] == 'IHC_Notify':
                     try:
-                        ihc.disconnect()
                         for i in range(0, len(message['resids'])):
-                            ihc.add_notify_event(message['resids'][i]['ResourceID'], on_ihc_change, True)
+                            ResourceId = int(message['resids'][i]['ResourceID'])
+                            ihc.add_notify_event(ResourceId, on_ihc_change, True)
                     except Exception as e:
                         logging.error('IHC_Notify error : '+str(e))
                 elif message['method'] == 'IHC_Read':
@@ -108,7 +112,7 @@ def main():
                         tmp["Value"] = str(value)
                         jeedomCom.send_change_immediate(tmp)
                     except Exception as e:
-                        logging.error('IHC_Notify error : '+str(e))
+                        logging.error('IHC_Read error : '+str(e))
                 else:
                     logging.error("unknown method:" + str(message['method']))
             except Exception as e:
@@ -117,12 +121,40 @@ def main():
     def listen():
         logging.debug("Start listening")
         jeedomSocket.open()
+        #lastPing = 0
+        #ping(lastPing)
+        count = 0
         try:
             while 1:
-                time.sleep(0.01)
-                read_socket()
+                while count < 1500:
+                    time.sleep(0.01)
+                    count = count + 1
+                    read_socket()
+                else:
+                    #lastPing = ping(lastPing)
+                    time.sleep(0.01)
+                    read_socket()
+                    count = 0
         except KeyboardInterrupt:
             shutdown()
+    
+    def ping(lastPing):
+        ping = os.system("ping -c 1 " + _controllerIP)
+        if ((ping == 0) and (ping != lastPing)):
+            lastPing = ping
+            logging.debug("Network Active")
+            tmp = {}
+            tmp["method"] = "networkStatus"
+            tmp["status"] = 'True'
+            jeedomCom.send_change_immediate(tmp)
+        if ((ping != 0) and (ping != lastPing)):
+            lastPing = ping
+            logging.debug("Network Error")
+            tmp = {}
+            tmp["method"] = "networkStatus"
+            tmp["status"] = 'False'
+            jeedomCom.send_change_immediate(tmp)
+        return ping
 
     # ----------------------------------------------------------------------------
 

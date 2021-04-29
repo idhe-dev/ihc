@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 """Implements soap reqeust using the "requests" module"""
 # pylint: disable=too-few-public-methods
 import xml.etree.ElementTree
@@ -18,7 +20,7 @@ class IHCConnection(object):
         """Initialize the IHCConnection with a url for the controller"""
         self.url = url
         self.cookies = ""
-        self.verify = False
+       # self.verify = False
         self.last_exception = None
         self.last_response = None
         self.session = requests.Session()
@@ -42,7 +44,7 @@ class IHCConnection(object):
                 url=self.url + service,
                 headers=headers,
                 data=payload,
-                verify=self.cert_verify(),
+                #verify=self.cert_verify(),
                 cookies=self.cookies,
             )
         except requests.exceptions.RequestException as exp:

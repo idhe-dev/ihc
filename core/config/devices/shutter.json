@@ -79,6 +79,24 @@
 					"generic_type": "FLAP_DOWN"
 				},
 				"isVisible": "1"
+			},
+			{
+				"name": "Hauteur",
+				"Synonyme": [ "height" ],
+				"type": "info",
+				"subType": "numeric",
+				"isHistorized": "0",
+				"unite": "%",
+				"configuration": {
+					"IhcObjectType": "Etat",
+					"inverse": "0",
+					"subTypeAuto": "1",
+					"noBatterieCheck": "0"
+				},
+				"display": {
+					"generic_type": "FLAP_STATE"
+				},
+				"isVisible": "0"
 			}
 		]
 	}

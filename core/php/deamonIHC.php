@@ -18,11 +18,6 @@
 try {
     require_once dirname(__FILE__) . "/../../../../core/php/core.inc.php";
 
-    if (init('test') != '') {
-        echo 'OK';
-        log::add('ihc', 'debug', 'test from daemon');
-        die();
-    }
     $result = json_decode(file_get_contents("php://input"), true);
     if (!is_array($result)) {
         die();
@@ -30,13 +25,32 @@ try {
 
     if ($result['method'] == 'updateValue') {
         ihc::updateValue($result);
-    } else {
+    } /*elseif ($result['method'] == 'networkStatus') {
+        ihc::networkStatus($result);
+    }*/ else {
         log::add('ihc', 'error', 'unknown message received from daemon');
         foreach ($result as $key => $value) {
             log::add('ihc', 'debug', "{$key}:{$value}");
         }
     }
-
+    /*
+    $method = $result['method'];
+    log::add('ihc', 'debug', "Method : {$method}");
+    switch ($method) {
+	    case 'updateValue':
+		    ihc::updateValue($result);
+		    break;
+	    case 'networkStatus':
+		    ihc::networkStatus($result['networkStatus']);
+		    break;
+	    default:
+		    log::add('ihc', 'error', 'unknown message received from daemon');
+            foreach ($result as $key => $value) {
+                log::add('ihc', 'debug', "{$key}:{$value}");
+            }
+		    break;
+    }
+    */
 } catch (Exception $e) {
     log::add('ihc', 'error', displayException($e));
 }

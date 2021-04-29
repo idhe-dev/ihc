@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 """
 Wraps the ihcclient in a more user friendly interface to handle lost connection
 Notify thread to handle change notifications
@@ -8,6 +10,7 @@ import requests
 import socket
 import threading
 import time
+import logging
 from ihcsdk.ihcclient import IHCSoapClient, IHCSTATE_READY
 
 
@@ -138,7 +141,7 @@ class IHCController:
     def add_notify_event(self, resourceid: int, callback, delayed=False):
         """Add a notify callback for a specified resource id
         If delayed is set to true the enable request will be send from the
-        notofication thread
+        notification thread
         """
         with IHCController._mutex:
             if resourceid in self._ihcevents:

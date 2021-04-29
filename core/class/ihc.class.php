@@ -2,6 +2,9 @@
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
 include_file('core', 'cmdt', 'class', 'ihc');
+
+$pingOldState;
+
 class ihc extends eqLogic {
 
 	/*public static function IHC_addState() {
@@ -21,7 +24,7 @@ class ihc extends eqLogic {
 		}
 	}*/
 	
-
+	
 
 
 
@@ -157,11 +160,17 @@ class ihc extends eqLogic {
 	public static function updateValue($result) {
 		$ResourceID = $result['ResourceID'];
 		$Value = $result['Value'];
-		if ($Value == 'True') {
-			$Value = 1;
-		} else {
-			$Value = 0;
-		}
+		switch ($Value) {
+			case 'True':
+				$Value = 1;
+				break;
+			case 'False':
+				$Value = 0;
+				break;
+			default:
+				//Keep $value Value
+				break;
+			}
 		log::add('ihc','debug','[State changes] '.$ResourceID.' : '.$Value);
 		foreach(eqLogic::byType('ihc') as $Equipement){		
 			if($Equipement->getIsEnable()){
@@ -180,7 +189,21 @@ class ihc extends eqLogic {
 		}
 	}
 
-	public static function getResourceIds() {
+	/*public static function networkStatus($result) {
+		$status = $result['networkStatus'];
+		if ($status == 'True') {
+			log::add('ihc','info','Ping réussi vers le contrôleur IHC, redémarrage du démon.');
+			self::deamon_start();
+		} else {
+			log::add('ihc','info','Ping échoué vers le contrôleur IHC, en attente de reconnexion.');
+		}
+	}*/
+
+	/*public static function cron() {
+		ihc::ihcNotify();
+	}*/
+
+	public static function ihcNotify() {
 		$data = [];
 		foreach(eqLogic::byType('ihc') as $Equipement){		
 			if($Equipement->getIsEnable()){
@@ -189,19 +212,12 @@ class ihc extends eqLogic {
 						if ($Commande->getConfiguration('IhcObjectType') == "Etat"){
 							$ResourceID=$Commande->getLogicalId();
 							$_id = $Commande->getId();
-											//$_eq = cmd::byId($_id)->getEqLogic();
-											//$Value = ihc::IHC_Read($ResourceID);
 							array_push($data, array("id" => $_id, "ResourceID" => intval($ResourceID)));
-											log::add('ihc','debug','[Demon Update Value] '.$ResourceID.' : '.$Value);
-											//$_eq->checkAndUpdateCmd($ResourceID,$Value);
 						}
 					}
 				}
 			}
 		}
-		$myfile = fopen("../../plugins/ihc/core/config/state.json", "w") or die("Unable to open file!");
-		fwrite($myfile, json_encode($data)) or die("Unable to write file!");
-		fclose($myfile);
 		$params = array(
 			'method' => 'IHC_Notify',
 			'resids' => $data
@@ -213,7 +229,7 @@ class ihc extends eqLogic {
     public function postSave() {
 		$deamon_info = self::deamon_info();
 		if ($deamon_info['state'] == 'ok') {
-			$data = ihc::getResourceIds();
+			ihc::ihcNotify();
 			if($this->getIsEnable()){
 					foreach($this->getCmd() as $Commande){
 						if($Commande->getType() == 'info'){
@@ -269,7 +285,6 @@ class ihc extends eqLogic {
 		$controllerID = config::byKey('controllerID', __CLASS__);
 		$controllerPW = config::byKey('controllerPW', __CLASS__);
 		$controllerIP = config::byKey('controllerIP', __CLASS__);
-		$IhcSoft = config::byKey('IhcSoft', __CLASS__);
 		if ($controllerID=='') {
 			$return['launchable'] = 'nok';
 			$return['launchable_message'] = __('Le nom d\'utilisateur n\'est pas configuré', __FILE__);
@@ -299,7 +314,6 @@ class ihc extends eqLogic {
 		$cmd .= ' --controllerID "' . trim(str_replace('"', '\"', config::byKey('controllerID', __CLASS__))) . '"';
 		$cmd .= ' --controllerPW "' . trim(str_replace('"', '\"', config::byKey('controllerPW', __CLASS__))) . '"';
 		$cmd .= ' --controllerIP "' . trim(str_replace('"', '\"', config::byKey('controllerIP', __CLASS__))) . '"';
-		$cmd .= ' --IhcSoft "' . trim(str_replace('"', '\"', config::byKey('IhcSoft', __CLASS__))) . '"';
 		$cmd .= ' --apikey ' . jeedom::getApiKey(__CLASS__);
 		$cmd .= ' --pid ' . jeedom::getTmpFolder(__CLASS__) . '/deamon.pid';
 		log::add(__CLASS__, 'info', 'Lancement démon IHC');
@@ -308,7 +322,7 @@ class ihc extends eqLogic {
 		while ($i < 20) {
 			$deamon_info = self::deamon_info();
 			if ($deamon_info['state'] == 'ok') {
-				$data = ihc::getResourceIds();
+				ihc::ihcNotify();
 				break;
 			}
 			sleep(1);
@@ -356,49 +370,14 @@ class ihcCmd extends cmd {
 			throw new Exception(__('Le type de commande ne peut être vide', __FILE__));
 		$this->setLogicalId(trim($this->getLogicalId()));    
 	}
-	/*public function postSave() {	
-		if ($this->getConfiguration('FlagInit')){
-			$BusValue = $this->execute();
-			if($this->getType() == 'info')			
-				log::add('ihc', 'info', $this->getHumanName().'[Initialisation] Lecture du GAD: '.$this->getLogicalId().' = '.$BusValue);
-			else
-				log::add('ihc', 'info', $this->getHumanName().'[Initialisation] Envoi sur le GAD: '.$this->getLogicalId());
-		}
-		$listener = listener::byClassAndFunction('ihc', 'TransmitValue', array('ihcCmd_id' => $this->getId()));
-		if($this->getConfiguration('FlagTransmit') && $this->getValue() != ''){
-			if (!is_object($listener)){
-				$CmdState=cmd::byId(str_replace('#','',$this->getValue()));
-				if(is_object($CmdState) && $CmdState->getEqType_name() == 'ihc'){
-					if($CmdState->getLogicalId() != $this->getLogicalId()){
-						$listener = new listener();
-						$listener->setClass('ihc');
-						$listener->setFunction('TransmitValue');
-						$listener->setOption(array('ihcCmd_id' => $this->getId()));
-						$listener->emptyEvent();
-						$listener->addEvent($CmdState->getId());
-						$listener->save();
-					}
-				}
-			}
-		}else{
-			if (is_object($listener))
-				$listener->remove();
-		}
-		$cache = cache::byKey('ihc::CreateNewGad');
-		$value = json_decode($cache->getValue('[]'), true);
-		$key = array_search($this->getLogicalId(), array_column($value, 'AdresseGroupe'));
-		if($key != false){
-			unset($value[$key]);
-			array_shift($value);
-			cache::set('ihc::CreateNewGad', json_encode($value), 0);
-		}
-	}*/
+
 	public function getOtherActionValue(){
 		$ActionValue = jeedom::evaluateExpression($this->getConfiguration('IhcObjectValue'));
 		if ($this->getConfiguration('IhcObjectValue') == "") 
 			$ActionValue = Cmdt::OtherValue($this->getConfiguration('IhcObjectType'),jeedom::evaluateExpression($this->getValue()));
 		return $ActionValue;
 	}
+
 	public function execute($_options = null){
 	log::add('ihc','debug','execute ');
 			$ResourceID=$this->getLogicalId();

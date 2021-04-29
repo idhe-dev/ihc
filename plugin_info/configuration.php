@@ -26,15 +26,6 @@ if (!isConnect()) {
     <legend><i class="fas fa-archive"></i> {{Connexion au Contrôleur IHC}}</legend>
       <fieldset>
         <div class="form-group">
-				<label class="col-sm-5 control-label" >{{Mode de communication :}}</label>
-				<div class="col-lg-3">
-					<select class="configKey form-control" data-l1key="IhcSoft" >
-						<option value="http">http</option>
-						<option value="https">https</option>
-					</select>
-				</div>
-	    </div>
-        <div class="form-group">
           <label class="col-sm-5 control-label">{{Adresse IP Contrôleur}}</label>
           <div class="col-lg-3">
             <input class="configKey form-control" data-l1key="controllerIP"/>
@@ -53,4 +44,13 @@ if (!isConnect()) {
       </div>
         </div>
       </fieldset>
+     <legend><i class="fas fa-university"></i> {{Démon}}</legend>
+        <fieldset>
+            <div class="form-group">
+                <label class="col-sm-5 control-label">{{Port socket interne (modification dangereuse)}}</label>
+                <div class="col-sm-1">
+                    <input class="configKey form-control" data-l1key="socketport" placeholder="55099" />
+                </div>
+            </div>
+        </fieldset>
 </form>
