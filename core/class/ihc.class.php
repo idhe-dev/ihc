@@ -176,7 +176,7 @@ class ihc extends eqLogic {
 			if($Equipement->getIsEnable()){
 				foreach($Equipement->getCmd() as $Commande){
 					if($Commande->getType() == 'info'){
-						if ($Commande->getConfiguration('IhcObjectType') == "Etat"){
+						if ($Commande->getConfiguration('IhcObjectType') == "Etat" || $Commande->getConfiguration('IhcObjectType') == "Hauteur"){
 							$CmdResourceID=$Commande->getLogicalId();
 							if ($ResourceID == $CmdResourceID) {
 								$_eq = $Commande->getEqLogic();
@@ -209,7 +209,7 @@ class ihc extends eqLogic {
 			if($Equipement->getIsEnable()){
 				foreach($Equipement->getCmd() as $Commande){
 					if($Commande->getType() == 'info'){
-						if ($Commande->getConfiguration('IhcObjectType') == "Etat"){
+						if ($Commande->getConfiguration('IhcObjectType') == "Etat" || $Commande->getConfiguration('IhcObjectType') == "Hauteur"){
 							$ResourceID=$Commande->getLogicalId();
 							$_id = $Commande->getId();
 							array_push($data, array("id" => $_id, "ResourceID" => intval($ResourceID)));
@@ -233,7 +233,7 @@ class ihc extends eqLogic {
 			if($this->getIsEnable()){
 					foreach($this->getCmd() as $Commande){
 						if($Commande->getType() == 'info'){
-							if ($Commande->getConfiguration('IhcObjectType') == "Etat"){
+							if ($Commande->getConfiguration('IhcObjectType') == "Etat" || $Commande->getConfiguration('IhcObjectType') == "Hauteur"){
 								$ResourceID=$Commande->getLogicalId();
 								$params = array(
 								'method' => 'IHC_Read',

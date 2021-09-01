@@ -167,6 +167,14 @@ class Cmdt{
 				"GenericType"=>"DONT",
 				"Option" =>array(),
 				"Unite" =>""),
+			"Hauteur"=> array(
+				"Name"=>"Scaling",
+				"Valeurs"=>array(),
+				"min"=>0,
+				"max"=>100,
+				"InfoType"=>'numeric',
+				"ActionType"=>'slider',
+				"Unite"=>"%"),
 			"Volet"=> array(
 				"Name"=>"Generic",
 				"Valeurs"=>array("Impulse"),

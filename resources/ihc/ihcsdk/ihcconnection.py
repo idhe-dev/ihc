@@ -46,6 +46,7 @@ class IHCConnection(object):
                 data=payload,
                 #verify=self.cert_verify(),
                 cookies=self.cookies,
+                timeout=30
             )
         except requests.exceptions.RequestException as exp:
             self.last_exception = exp
